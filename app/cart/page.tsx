@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Container, Card, Typography, Button, Box, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import { Add, Remove, Delete } from "@mui/icons-material";
 import { useAtom } from "jotai";
 import { cartAtom, removeFromCartAtom, updateQuantityAtom } from "../store/cartAtom";
+import { CartProduct } from "../types";
 
 export default function Cart() {
   const [cart] = useAtom(cartAtom);
@@ -13,7 +12,7 @@ export default function Cart() {
   const removeItem = useAtom(removeFromCartAtom)[1];
 
   const getTotalCost = () => {
-    return cart.reduce((total: any, item: any) => total + (item?.price || 0) * (item?.quantity || 0), 0).toFixed(2);
+    return cart.reduce((total: number, item: CartProduct) => total + (item?.price || 0) * (item?.quantity || 0), 0).toFixed(2);
   };
   
   return (
@@ -34,11 +33,11 @@ export default function Cart() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {cart.map((item: any) => (
+              {cart.map((item: CartProduct) => (
                 <TableRow key={item.id}>
                   <TableCell>
                     <Box display="flex" alignItems="center" gap={4}>
-                      <img src={item.image} alt={item.name} width={50} height={50} style={{ borderRadius: 5 }} />
+                      <img src={item.image} alt={item.title} width={50} height={50} style={{ borderRadius: 5 }} />
                       <Typography>
                         {item.title.length > 25 ? `${item.title.slice(0, 25)}...` : item.title}
                       </Typography>
