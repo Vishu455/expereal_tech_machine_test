@@ -13,13 +13,21 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAtom } from "jotai";
 import { cartAtom } from "../store/cartAtom";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useThemeContext } from "./themeContext";
 
 const Navbar: React.FC = () => {
+  const { toggleTheme, mode } = useThemeContext();
   const [cart] = useAtom(cartAtom);
   const cartItemCount = cart.length;
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#1E1E2F", boxShadow: 3 }}>
+    <AppBar
+      position="static"
+      sx={{ backgroundColor: "#1E1E2F", boxShadow: 3 }}
+      color="primary"
+    >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography
           variant="h6"
@@ -43,6 +51,11 @@ const Navbar: React.FC = () => {
             Home
           </Typography>
         </Box>
+        {/* Theme Toggle Button */}
+        <IconButton onClick={toggleTheme} color="inherit">
+          {mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+
         <IconButton component={Link} href="/cart" sx={{ color: "white" }}>
           <Badge badgeContent={cartItemCount} color="error">
             <ShoppingCartIcon />
