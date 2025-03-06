@@ -1,40 +1,96 @@
 "use client";
 import React from "react";
-import { Card, CardMedia, CardContent, Typography, Button, Box, Container, Rating } from "@mui/material";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Button,
+  Box,
+  Container,
+  Rating,
+} from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useSetAtom } from "jotai";
+import { addToCartAtom } from "@/app/store/cartAtom";
 
-const product = {
-  id: 2,
-  title: "Mens Casual Premium Slim Fit T-Shirts ",
-  price: 22.3,
-  description:
-    "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight & soft fabric for breathable and comfortable wearing. And Solid stitched shirts with round neck made for durability and a great fit for casual fashion wear and diehard baseball fans. The Henley style round neckline includes a three-button placket.",
-  category: "men's clothing",
-  image:
-    "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
-  rating: {
-    rate: 4.1,
-    count: 259,
-  },
-};
+const ProductDetails = ({ params }: { params: { productId: number } }) => {
+  const { productId } = params;
+  const addToCart = useSetAtom(addToCartAtom);
 
-const ProductDetails: React.FC = () => {
+  const {
+    data: product,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["product", productId],
+    queryFn: () => fetchProductDetails(productId),
+    enabled: !!productId,
+  });
+
+  const fetchProductDetails = async (id: number) => {
+    const { data } = await axios.get(`https://fakestoreapi.com/products/${id}`);
+    return data;
+  };
+
+  if (isLoading) return <p>Loading product details...</p>;
+  if (error || !product) return <p>Error loading product details</p>;
+
   return (
-    <Container maxWidth="xl" sx={{ minHeight: "90vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <Card sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, boxShadow: 3, borderRadius: 2, p: 3, height: "80vh", maxWidth: "1200px", width: "100%" }}>
+    <Container
+      maxWidth="xl"
+      sx={{
+        minHeight: "90vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Card
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          boxShadow: 3,
+          borderRadius: 2,
+          p: 3,
+          height: "80vh",
+          maxWidth: "1200px",
+          width: "100%",
+        }}
+      >
         <CardMedia
           component="img"
           image={product.image}
           alt={product.title}
-          sx={{ width: { xs: '100%', md: 400 }, height: "70%", objectFit: 'contain', borderRadius: 2 }}
+          sx={{
+            width: { xs: "100%", md: 400 },
+            height: "70%",
+            objectFit: "contain",
+            borderRadius: 2,
+          }}
         />
-        <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', height: "100%" }}>
+        <CardContent
+          sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            height: "100%",
+          }}
+        >
           <Typography variant="h4" fontWeight="bold" gutterBottom>
             {product.title}
           </Typography>
           <Typography variant="body1" color="textSecondary" gutterBottom>
             Category: {product.category}
           </Typography>
-          <Typography variant="h5" color="primary" fontWeight="bold" gutterBottom>
+          <Typography
+            variant="h5"
+            color="primary"
+            fontWeight="bold"
+            gutterBottom
+          >
             ${product.price}
           </Typography>
           <Typography variant="body1" color="textSecondary" paragraph>
@@ -47,7 +103,12 @@ const ProductDetails: React.FC = () => {
             </Typography>
           </Box>
           <Box mt={3}>
-            <Button variant="contained" color="primary" sx={{ borderRadius: 2, py: 1, fontSize: "1rem" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ borderRadius: 2, py: 1, fontSize: "1rem" }}
+              onClick={() => addToCart(product)}
+            >
               Add to Cart
             </Button>
           </Box>
