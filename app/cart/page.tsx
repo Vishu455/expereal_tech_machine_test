@@ -5,6 +5,7 @@ import { Add, Remove, Delete } from "@mui/icons-material";
 import { useAtom } from "jotai";
 import { cartAtom, removeFromCartAtom, updateQuantityAtom } from "../store/cartAtom";
 import { CartProduct } from "../types";
+import Link from "next/link";
 
 export default function Cart() {
   const [cart] = useAtom(cartAtom);
@@ -62,9 +63,11 @@ export default function Cart() {
         </TableContainer>
         <Box mt={3} display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6" fontWeight="bold">Total Cost: ${getTotalCost()}</Typography>
+          <Link href="/">
           <Button variant="contained" color="primary" sx={{ borderRadius: 2, py: 1, px: 2, fontSize: "0.8rem" }}>
             Proceed to Checkout
           </Button>
+          </Link>
         </Box>
       </Card>
     </Container>

@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
             Home
           </Typography>
         </Box>
-        {/* Theme Toggle Button */}
+      
         <IconButton onClick={toggleTheme} color="inherit">
           {mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
         </IconButton>

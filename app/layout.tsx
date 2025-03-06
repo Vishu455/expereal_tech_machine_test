@@ -20,7 +20,7 @@ export default function RootLayout({
     <ThemeProviderWrapper>
       <html lang="en">
         <BodyContent queryClient={queryClient}>{children}</BodyContent>
-      </html>
+      </html> 
     </ThemeProviderWrapper>
   );
 }
